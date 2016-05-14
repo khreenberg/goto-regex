@@ -1,0 +1,80 @@
+table.wifi {
+    border: 2px solid;
+}
+
+table.wifi td {
+    vertical-align: middle;
+    font-weight: normal;
+    text-align: left;
+}
+
+table.wifi td.leftcol {
+    font-weight: bold;
+}
+
+table.wifi td.ssidgroup {
+    font-size: 80%;
+    font-style: italic;
+}
+
+table.wifi td.value::first-line {
+	/* color: #f60; */
+	font-family: monospace;
+	letter-spacing: 0.1em;
+}
+
+.f60 {
+    color: #F60 !important;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5 {
+    text-transform: none;
+    margin-top: 1em
+}
+
+.reveal h1 {
+    font-variant: small-caps;
+}
+
+/* Fragment highlight #F60 */
+.reveal .slides section .fragment.highlight-f60.visible {
+  color: #f60; }
+
+.reveal .slides section .fragment.highlight-current-f60 {
+  opacity: 1;
+  visibility: visible; }
+
+.reveal .slides section .fragment.highlight-current-f60.current-fragment {
+  color: #f60; }
+
+
+
+/* Reverse slide transition */
+.reveal .slides > section[data-transition=reverse].future,
+.reveal .slides > section[data-transition~=reverse-in].future,
+.reveal.reverse .slides > section:not([data-transition]).future {
+  -webkit-transform: translate(-150%, 0);
+          transform: translate(-150%, 0); }
+
+
+.reveal .slides > section[data-transition=reverse].past,
+.reveal .slides > section[data-transition~=reverse-out].past,
+.reveal.reverse .slides > section:not([data-transition]).past {
+  -webkit-transform: translate(150%, 0);
+          transform: translate(150%, 0); }
+
+.reveal .slides > section > section[data-transition=reverse].future,
+.reveal .slides > section > section[data-transition~=reverse-in].future,
+.reveal.reverse .slides > section > section:not([data-transition]).future {
+  -webkit-transform: translate(0, -150%);
+          transform: translate(0, -150%); }
+
+.reveal .slides > section > section[data-transition=reverse].past,
+.reveal .slides > section > section[data-transition~=reverse-out].past,
+.reveal.reverse .slides > section > section:not([data-transition]).past {
+  -webkit-transform: translate(0, 150%);
+          transform: translate(0, 150%); }
