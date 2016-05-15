@@ -41,6 +41,10 @@ table.wifi td.value::first-line {
 }
 
 /* Fragment highlight #F60 */
+.reveal .slides section .fragment.highlight-f60 {
+  opacity: 1.0;
+  visibility: visible; }
+
 .reveal .slides section .fragment.highlight-f60.visible {
   color: #f60; }
 
