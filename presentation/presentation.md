@@ -158,18 +158,148 @@ $$x \in A \cap B \iff (x \in A) \wedge (x \in B)$$
 
 ===
 
+## Formal definition of regular languages
+The collection of regular languages over `$\Sigma$` is defined recursively as follows:
+
+- `$\emptyset$` and `$\{\lambda\}$` are regular languages
+- For each `$\sigma \in \Sigma$`, the language `$\{\sigma\}$` regular
+- Let `$L_1$` and `$L_2$` be regular languages over `$\Sigma$`; the languages `$L_1\cup L_2$`, `$\ L_1\cdot L_2$` and `${L_1}^*$` are also regular
+- No other languages are regular
+
+%SPEAK%
+
+Explicitly mentioning `$\{\lambda\}$` is redundant, as `$\emptyset^*=\{\lambda\}$`
+
+
+---
+
 ## Examples 
 
 With the alphabet `$\Sigma=\{a,b,c\}$`, we could for example define the following languages
-- `$L_1=\{w : w\ \text{is a word that ends in}\ a\}$` 
-- `$L_2=\{w : w\ \text{is a palindrome with a length between 2 and 5}\}$`
-- `$L_3=\{w : w\ \text{is a word where all $a$s are immediately followed by a $b$, unless they are preceded by a $c$, and}\ldots\}$`
+- `$L_1=\{w \mid w\ \text{is a word that ends in}\ a\}$` 
+- `$L_2=\{w \mid w\ \text{is a palindrome}\}$`
+- `$L_3=\{w \mid w\ \text{is a word where all $a$s are immediately followed by a $b$, unless they are preceded by a $c$, and}\ldots\}$`
 
-&hellip;if only we had a simple way of defining languages&hellip;
+&hellip;if only we had a simple and precise way of defining languages&hellip;
+
+---
+
+## Describing languages with regular expressions
+
+Set <!-- .element: style="width: 50%" --> | Regular expression
+:-----------------------------------------|-------------------
+`${L_1}^*$`                               | `${L_1}^*$`
+`$L_1 \cdot L_2$`                         | `$L_1L_2$`
+`$L_1 \cup L_2$`                          | `$L_1+L_2$`
+
+
+---
+
+## Previous examples
+$$
+\\begin{align}
+  L_1 & =\\{w \mid w\ \text{is a word that ends in}\ a\\} \\\\
+  L_2 & =\\{w \mid w\ \text{is a palindrome}\\} \\\\
+  L_3 & =\\{w \mid w\ \text{is a word where all $a$s are immediately followed by a $b$, unless they are preceded by a $c$}\\} \\\\
+\\end{align}
+$$
+<!-- .element: style="float: left" -->
+
+<br><br><br><br><br>
+
+## With regular expressions
+\\begin{align}
+  L_1 & = (a+b+c)^*a \\\\
+  L_2 & = \text{???} \\\\
+  L_3 & = (ab+b)^∗(\lambda+(c(a+b+c)^∗))
+\\end{align}
+<!-- .element: style="float: left" -->
+
 
 ===
 
-## Describing languages with regular expressions
+## Regex ≠ regular expressions (cont.)
+- "*Real*" regular expressions can only recognize *regular languages*
+- Regexes can recognize a much wider range of languages, including palindromes
+
+<br>
+<br>
+
+![][Chomsky]
+<!-- .element: style="float:right; padding: .1em" -->
+
+Type   | Language               | Recognized by
+-------|------------------------|----------------------
+Type-0 | Recursively enumerable | Turing machine
+       | Recursive              | *Total* Turing machine
+Type-1 | Context-sensitive      | Linear-bounded automaton
+Type-2 | Context-free           | Pushdown automaton
+Type-3 | Regular                | Finite automaton
+<!-- .element: style="float:left" -->
+
+[Chomsky]: presentation/img/Chomsky-hierarchy.svg "Chomsky heirarchy; By J. Finkelstein - Own work, CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=9405226"
+
+---
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Language</th>
+      <th>Recognized by</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Type-0</td>
+      <td>Recursively enumerable</td>
+      <td>Turing machine</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Recursive</td>
+      <td><em>Total</em> Turing machine</td>
+    </tr>
+    <tr class="fragment highlight-f60" data-fragment-index="2">
+      <td>Type-1</td>
+      <td>Context-sensitive</td>
+      <td>Linear-bounded automaton</td>
+    </tr>
+    <tr>
+      <td>Type-2</td>
+      <td>Context-free</td>
+      <td>Pushdown automaton</td>
+    </tr>
+    <tr class="fragment highlight-f60" data-fragment-index="1">
+      <td>Type-3</td>
+      <td>Regular</td>
+      <td>Finite automaton</td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
+
+1. Kleene's theorem states that regular expressions and finite automata are equal &mdash; They are simply different ways to convey the same meaning.
+<!-- .element: data-fragment-index="1" class="fragment" -->
+
+2. Regex can be simulated by a linear-bounded automaton.
+<!-- .element: data-fragment-index="2" class="fragment" -->
+
+<!-- .element: style="width: 70%" -->
+
+
+%SPEAK%
+I will talk about Kleene's theorem later, if there's time and interest.
+
+===
+
+# Formal theory done,
+# let's see some regex!
+<!-- .element: class="fragment f60" -->
+
+===
+
 
 
 ===
@@ -187,4 +317,5 @@ With the alphabet `$\Sigma=\{a,b,c\}$`, we could for example define the followin
 ### Tools
 - http://www.regexpal.com/ 
 - https://www.sublimetext.com/3
+
 
