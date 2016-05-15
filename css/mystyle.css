@@ -40,6 +40,11 @@ table.wifi td.value::first-line {
     font-variant: small-caps;
 }
 
+/* Red progress bar for disabled fragments */
+.reveal .progress span.nofrags {
+  background: #F00;
+}
+
 /* Fragment highlight #F60 */
 .reveal .slides section .fragment.highlight-f60 {
   opacity: 1.0;

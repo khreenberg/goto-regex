@@ -69,6 +69,14 @@
       ]
     });
     /* beautify preserve:end */
+
+    // Fragment toggle hotkey 'q'
+    document.addEventListener( 'keydown', function(event){
+      if (event.keyCode !== 81) return; // keycode 81 = 'q'
+      var frags = !Reveal.getConfig().fragments;
+      Reveal.configure({fragments: frags});
+      document.querySelector('body div.reveal div.progress span').classList.toggle('nofrags', !frags);
+    }, false ); 
   </script>
 </body>
 
