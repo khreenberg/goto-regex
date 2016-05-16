@@ -290,7 +290,7 @@ Type-3 | Regular                | Finite automaton
 2. Regex can be simulated by a linear-bounded automaton.
 <!-- .element: data-fragment-index="2" class="fragment" -->
 
-<!-- .element: style="width: 70%" -->
+<!-- .element: style="width: 70%; list-style-type: none" -->
 
 
 %SPEAK%
@@ -449,6 +449,461 @@ A quick Google search did not reveal whether or not FSA-based algorithms can typ
 	<li>regular expression</li>
 	<li>regular expressions</li>
 </ul>
+
+===
+
+# Syntax
+
+---
+
+## Metacharacters
+<!-- .element: style="margin-top:-1em" -->
+
+<!-- table style -->
+<style>
+	table.metacharactertable tr th:nth-child(3),
+	table.metacharactertable tr td:nth-child(3),
+	table.metacharactertable tr td:empty {
+		border: none;
+	}
+
+	table.metacharactertable tr code {
+		background: lightgray;
+		padding: 0 .25em 0 .25em;
+	}
+
+	table.metacharactertable tr sup {
+		font-size: 70%;	}
+</style>
+
+Symbol   | Meaning                                                                                                      |   | Symbol              | Meaning
+:-------:|--------------------------------------------------------------------------------------------------------------|---|:-------------------:|--------
+`\`      | Escape character                                                                                             |   | `.`                 | <span class="fragment highlight-current-f60" data-fragment-index="2">Any single character<sup>2</sup></span>
+`^`      | <span class="fragment highlight-current-f60" data-fragment-index="1">Beginning of string<sup>1</sup></span>  |   | `[…]`               | Character class
+`$`      | <span class="fragment highlight-current-f60" data-fragment-index="1">End of string<sup>1</sup></span>        |   | `[^…]`              | Negated character class
+`?`      | Zero or one                                                                                                  |   | <code>&#124;</code> | Alternation
+`*`      | Zero or more                                                                                                 |   | `-`                 | <span class="fragment highlight-current-f60" data-fragment-index="3">Character class range<sup>3</sup></span>
+`+`      | One or more                                                                                                  |   |                     |
+`{…}`    | Explicit quantification                                                                                      |   |                     |
+<!-- .element: class="metacharactertable" -->
+
+***
+
+<ol class="stretch">
+  <li class="fragment" data-fragment-index="1">
+    Behavior can change with certain modifiers. <br/>
+    Often the default behaviour is finding the start and end of individual lines in the input.
+  </li>
+  <li class="fragment" data-fragment-index="2">
+    Typically does not match newline characters without using modifiers.
+  </li>
+  <li class="fragment" data-fragment-index="3">
+    <p><code style="background: lightgray; padding: 0 .25em 0 .25em">-</code> is only a meta character if it is used between characters in a character class.<br/>
+    E.g. `[-az]`, `[a\-z]` and `[az-]` all match ***a***, ***z***, and ***–***. `[a-z]` however matches any character between *a* and *z*. </p>
+  </li>
+</ol>
+
+
+%SPEAK%
+By *metacharacters* I mean characters that needs to be escaped if you want to search for them.
+
+There is no `{,*n*}`, use `{0,*n*}` instead.
+
+
+---
+
+## Character classes
+
+Let's say we want to find all lowercase letters in the english alphabet.
+<!-- .element: style="margin-bottom: 1em" -->
+
+<div class="fragment">
+	<p>This will work…</p>
+	<pre class="nohighlight" style="text-align: center; font-size: 100%;"><code>a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z</code></pre>
+	<p>…but it's *quite* verbose.</p>
+</div>
+<div class="fragment">
+	<p>Instead, we can use *character classes*, like so:</p>
+	<pre class="nohighlight" style="text-align: center; font-size: 100%;"><code>[abcdefghijklmnopqrstuvwxyz]</code></pre>
+</div>
+<div class="fragment">
+	<p>Or even better—we can use '–' to specify a range:</p>
+	<pre class="nohighlight" style="text-align: center; font-size: 100%;"><code>[a-z]</code></pre>
+</div>
+
+Metacharacter escaping is only neccessary for those that have a special meaning within character classes.
+<!-- .element: class="fragment" -->
+
+---
+
+## Shorthand character classes
+
+Shorthand <!-- .element: width="30%" --> | Matches
+-----------------------------------------|--------
+`\w`                                     | Word character
+`\d`                                     | Digit
+`\s`                                     | Whitespace
+`\v`                                     | Vertical whitespace
+`\h`                                     | Horizontal whitespace
+<!-- .element: width="50%" -->
+
+Each shorthand can be negated by using the uppercase letter instead:
+<!-- .element:  class="fragment" data-fragment-index="1" -->
+
+Shorthand <!-- .element: width="30%" --> | Matches
+-----------------------------------------|--------
+`\W`                                     | Anything but a word character
+`\D`                                     | Anything but a digit
+`\S`                                     | Anything but a whitespace
+`\V`                                     | Anything but a vertical whitespace
+`\H`                                     | Anything but a horizontal whitespace
+<!-- .element: width="50%" class="fragment" data-fragment-index="1" -->
+
+
+%SPEAK%
+Note that the shorthand character classes are particularly dependent on flavor.
+
+---
+
+## Negated character classes
+
+<p class="fragment">Explicit character classes like `[abc]` can also be negated.</p>
+<p class="fragment">`[^abc]` matches anything that isn't an **`a`**, **`b`** or **`c`**.</p>
+<br>
+<p class="fragment">Character classes—negated or not—can be used with the shorthand classes as well.</p>
+<p class="fragment">`[\w\v]` matches any character that is either a *word character* or a *vertical whitespace*.</p>
+<br>
+<p class="fragment">By "exploiting" double negation, we can write some pretty neat shortcuts.</p>
+<p class="fragment">For example, <span class="f60">`[^abc\W]`</span> matches the same characters as <span class="f60">`(?![abc])\w`</span>.</p>
+
+%SPEAK%
+Hopefully I will get to show some more cool usages of double negation later in the talk.
+
+---
+
+## Unicode character classes
+
+Some flavors feature character classes for each of the Unicode categories, scripts and blocks.
+
+These character classes are typically accessed with <span class="f60">`\p{Category_Name}`</span>.
+
+<div class="fragment">
+	<h3>Examples</h3>
+	<table>
+		<thead>
+			<tr>
+				<th>Type</th>
+				<th>Usage</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Category</td>
+				<td>`\p{Lowercase_Letter}`</td>
+				<td>Any lowercase letter from any script that has an uppercase variant</td>
+			</tr>
+			<tr>
+				<td>Script</td>
+				<td>`\p{Hiragana}`</td>
+				<td>Any character from the hiragana syllabary</td>
+			</tr>
+			<tr>
+				<td>Block</td>
+				<td><code data-noescape>\p{<span class="f60">**In**</span>Hiragana}</code></td>
+				<td>Any Unicode code point in the range `U+3040–U+309F`</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<p class="fragment">As with the other shorthand character classes, <span class="f60">**`\p{…}`**</span> can be negated with <span class="f60">**`\P{…}`**</span>.</p>
+
+---
+
+## A quick word on POSIX
+<ul style="list-style-type: none;">
+	<li class="fragment" data-fragment-index="1"><p data-fragment-index="1" class="fragment highlight-current-f60">You may come across the word '*POSIX*' when reading or referencing regex materials.</p></li>
+	<li class="fragment" data-fragment-index="2"><p data-fragment-index="2" class="fragment highlight-current-f60">POSIX is an abbreviation for *"Portable Operating System Interface for uniX"*, which is a set of standards that a UNIX OS should support.</p></li>
+	<li class="fragment" data-fragment-index="3"><p data-fragment-index="3" class="fragment highlight-current-f60">These standards define two flavors of regex, the *POSIX Basic Regular Expressions* (POSIX BRE) and *POSIX Extended Regular Expressions* (POSIX ERE).</p></li>
+	<li class="fragment" data-fragment-index="4"><p data-fragment-index="4" class="fragment highlight-current-f60">The POSIX flavors are in many ways quite different from other (more modern) flavors, and many regex references will mention the POSIX character classes.</p></li>
+	<li class="fragment" data-fragment-index="5">For example, the POSIX character class <span class="f60">**`[:digit:]`**</span> will match the same characters as <span class="f60">**`[0-9]`**</span>, <span class="f60">**`\d`**</span> and <span class="f60">**`\p{Decimal_Digit_Number}`**</span>.</li>
+</ul>
+
+===
+
+## Quantifiers
+
+<p class="fragment">~~Sometimes~~ *Very often* we want to repeat (a part of) our regex.</p>
+
+<p class="fragment">Consider checking a piece of text to see if it contains a numbers-only substring of length 10.</p>
+
+<p class="fragment"><span class="f60">`\d\d\d\d\d\d\d\d\d\d`</span> works, but it is neither very readable or scalable.</p>
+
+<p class="fragment">By using quantifiers, we can tell the regex engine to repeat the `\d` part of our regex 10 times.</p>
+
+<p class="fragment"><span class="f60">`\d{10}`</span> matches the same substrings as the regex above.</p>
+
+---
+
+## Quantifier reference
+Syntax     <!-- .element: width="40%" --> | Meaning
+:-----------------------------------------|--------
+<code>&nbsp;?</code>                      | Zero or one
+<code>&nbsp;*</code>                      | Zero or more
+<code>&nbsp;+</code>                      | One or more
+<code>{***n***}</code>                    | Exactly <code>***n***</code>
+<code>{***n***,}</code>                   | <code>***n***</code> or more
+<code>{***n***,***m***}</code>            | <code>***n***</code> to <code>***m***</code> (inclusive)
+
+---
+
+## Quantifier behaviour
+<p class="fragment">Regex quantifiers are *greedy* by default.</p>
+
+<br>
+<br>
+
+<div class="fragment">
+<p>For example, the regex <span class="f60">`A\w*C`</span> applied to</p>
+<pre class="nohighlight" style="text-align: center; font-size: 100%;"><code data-noescape>bbbCAbbbCAbbbCAbbb</code></pre>
+</div>
+
+<div class="fragment">
+<p>won't just match</p>
+<pre class="nohighlight" style="text-align: center; font-size: 100%;"><code data-noescape>bbbC<span class="f60">AbbbC</span>AbbbCAbbb</code></pre>
+</div.fragment>
+
+<div class="fragment">
+<p>but instead</p>
+<pre class="nohighlight" style="text-align: center; font-size: 100%;"><code data-noescape>bbbC<span class="f60">AbbbCAbbbC</span>Abbb</code></pre>
+</div.fragment>
+
+---
+
+## Modifying the behaviour of quantifiers
+<table>
+	<thead>
+		<tr>
+			<th>Syntax</th>
+			<th>Behaviour</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code data-noescape>\w<span class="fragment highlight-current-f60" data-fragment-index="3">\*</span></code></td>
+			<td>Greedy</td>
+			<td>Matches as many characters as possible</td>
+		</tr>
+		<tr>
+			<td><code data-noescape>\w<span class="fragment highlight-current-f60" data-fragment-index="3">\*</span>?</code></td>
+			<td>Lazy</td>
+			<td>Matches as few characters as possible</td>
+		</tr>
+		<tr>
+			<td><code data-noescape>\w<span class="fragment highlight-current-f60" data-fragment-index="3">\*</span>+</code></td>
+			<td>Possessive</td>
+			<td>Will not backtrack</td>
+		</tr>
+	</tbody>
+</table>
+
+<p class="fragment" data-fragment-index="3">The <span class="f60">`*`</span> quantifier can of course be substituted by any of the other quantifiers.</p>
+
+
+---
+
+## Behaviour examples
+
+<table>
+  <thead>
+    <tr>
+      <th>Regex</th>
+      <th>Behaviour</th>
+      <th>Match</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code data-noescape>[ab]+b</code></td>
+      <td>Greedy</td>
+      <td><code data-noescape><span class="f60">aabaab</span></code></td>
+    </tr>
+    <tr>
+      <td><code data-noescape>[ab]+?b</code></td>
+      <td>Lazy</td>
+      <td><code data-noescape><span class="f60">aab</span>aab</code></td>
+    </tr>
+    <tr>
+      <td><code data-noescape>[ab]++b</code></td>
+      <td>Possessive</td>
+      <td><code data-noescape>aabaab</code></td>
+    </tr>
+  </tbody>
+</table>
+
+===
+
+## Assertions
+
+<p class="fragment">Sometimes we need to inspect our surroundings without actually matching them.</p>
+<p class="fragment">Consider the input string <span class="f60">**`<h1>Replace me!</h1>`**</span></p>
+<p class="fragment">If we want to replace the content of the `<h1>`-tag with <span class="f60">`I was replaced.`</span>, we could</p>
+<ul>
+	<li class="fragment">search for <span class="f60">**`<h1>.*?</h1>`**</span>, and</li>
+	<li class="fragment">replace it with <span class="f60">**`<h1>I was replaced.</h1>`**</span></li>
+</ul>
+<p class="fragment">This example is not too bad, but one can imagine how some searches would need quite a bit of repetition.</p>
+<p class="fragment">Assertions make it possible to inspect the string without consuming any characters.</p>
+<p class="fragment">For example, we can achieve the same result as before by using regex *look-arounds* to</p>
+<ul>
+	<li class="fragment">search for <span class="f60">**`(?<=<h1>).*?(?=</h1>)`**</span>, and</li>
+	<li class="fragment">replacing with <span class="f60">**`I was replaced.`**</span></li>
+</ul>
+
+---
+
+## Assertion types
+
+<table style="font-size: 90%;">
+	<tbody>
+		<thead>
+			<tr>
+				<th style="font-weight: normal; font-style: italic;">Usage</th>
+				<th style="font-weight: normal; font-style: italic;">Description</th>
+				<th style="font-weight: normal; font-style: italic;">Example</th>
+			</tr>
+		</thead>
+		<tr>
+			<td colspan="3" align="center">**Boundaries**</td>
+		</tr>
+		<tr>
+			<td><code>\b</code></td>
+			<td>Word boundary</td>
+			<td><code>\bword\b</code></td>
+		</tr>
+		<tr>
+			<td colspan="3" align="center">**Anchors**</td>
+		</tr>
+		<tr>
+			<td><code>^</code></td>
+			<td>Start of input (or line)</td>
+			<td><code>^.\*$</code></td>
+		</tr>
+		<tr>
+			<td><code>$</code></td>
+			<td>End of input (or line)</td>
+			<td><code>^.\*$</code></td>
+		</tr>
+		<tr>
+			<td><code>\A</code></td>
+			<td>Absolute start of input</td>
+			<td><code>\A.\*$</code></td>
+		</tr>
+		<tr>
+			<td><code>\Z</code></td>
+			<td>End of input (ignoring blank lines)</td>
+			<td><code>\Z\s</code></td>
+		</tr>
+		<tr>
+			<td><code>\z</code></td>
+			<td>Absolute end of input</td>
+			<td><code>\s\z</code></td>
+		</tr>
+		<tr>
+			<td colspan="3" align="center">**Look-arounds**</td>
+		</tr>
+		<tr>
+			<td><code>(?=…)</code></td>
+			<td>Positive look-ahead</td>
+			<td><code>a(?=b)</code></td>
+		</tr>
+		<tr>
+			<td><code>(?!…)</code></td>
+			<td>Negative look-ahead</td>
+			<td><code>b(?!a)</code></td>
+		</tr>
+		<tr>
+			<td><code>(?<=…)</code></td>
+			<td>Positive look-behind</td>
+			<td><code>(?<=a)b</code></td>
+		</tr>
+		<tr>
+			<td><code>(?<!…)</code></td>
+			<td>Negative look-behind</td>
+			<td><code>(?<!b)a</code></td>
+		</tr>
+	</tbody>
+</table>
+
+===
+
+## Groups
+
+<p class="fragment">We've already seen the non-capturing group <span class="f60">`(?:…)`</span> syntax a few times.</p>
+
+<p class="fragment">As the name suggests, regex also has *non-non-capturing groups*—or just *capturing groups*.</p>
+
+<p class="fragment">The syntax for capturing groups is simply <span class="f60">`(…)`</span>.</p>
+
+<p class="fragment">These are particularly useful for *search & replace*, and can even be used for *backreferencing*.</p>
+
+---
+
+## Search and replace example
+
+Searching for <span class="f60">`^(.*)$`</span> and replacing with <span class="f60">`Hello, $1!`</span> we can quickly change the following input
+
+<pre data-fragment-index="1" class="fragment" style="font-size: 100%;">
+<code class="nohighlight" data-noescape data-trim>
+<span class="fragment highlight-current-f60" data-fragment-index="4">World</span>
+<span class="fragment highlight-current-f60" data-fragment-index="5">GOTO</span>
+<span class="fragment highlight-current-f60" data-fragment-index="6">regex</span></code></pre>
+
+<p class="fragment" data-fragment-index="2">to the following output</p>
+
+<pre data-fragment-index="3" class="fragment" style="font-size: 100%;" data-trim>
+<code class="nohighlight" data-noescape data-trim>
+<span class="fragment" data-fragment-index="4">Hello, <span class="fragment highlight-current-f60" data-fragment-index="4">World!</span></span>
+<span class="fragment" data-fragment-index="5">Hello, <span class="fragment highlight-current-f60" data-fragment-index="5">GOTO!</span></span>
+<span class="fragment" data-fragment-index="6">Hello, <span class="fragment highlight-current-f60" data-fragment-index="6">regex!</span></span></code></pre>
+
+---
+
+## Backreferencing
+
+<p class="fragment" data-fragment-index="1">Recall that we can recognize a larger set of languages with regex compared to regular expressions.</p>
+<p class="fragment" data-fragment-index="2">This is because we are able to reference a capture group *within the regex itself*.</p>
+<p class="fragment" data-fragment-index="3">For example, <span class="f60">`(.)\1`</span> will match <span style="color: green">`aa`</span> and <span style="color: green">`>>`</span>, but not <span style="color: red">`xy`</span></p>
+
+<br>
+<p>In addition to referencing the contents of a group, it is also possible to reference the *regex* for the group. This is called a *subroutine*.</p>
+<p class="fragment" data-fragment-index="10">Let's revisit our regex that matches palindromes.</p>
+
+---
+
+## Subroutines
+
+<h3>`^((.)(?1)\2|.?)$`</h2>
+
+<h4>Input: **`abba`**</h4>
+
+Level | Group 1 | Group 2 | Trying to match | Finds
+-----:|:-------:|:-------:|-----------------|-------
+    0 |         | a       |                 | (?1)   
+    1 |         | b       |                 | (?1)   
+    2 |         | b       |                 | (?1)   
+    3 |         | a       |                 | (?1)   
+    4 |         |         |                 | $
+    3 |         | a       | aa              | a$
+    2 |         | b       | bb              | ba
+    1 |         | b       | bb              | bb
+    0 | bb      | a       | abba            | abba
+
+%SPEAK%
+
+Heavily simplified for readability; I am ignoring the fact that `.?` is greedy.
 
 ===
 
