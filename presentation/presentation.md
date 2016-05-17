@@ -853,7 +853,7 @@ Syntax     <!-- .element: width="40%" --> | Meaning
 
 ## Search and replace example
 
-Searching for <span class="f60">`^(.*)$`</span> and replacing with <span class="f60">`Hello, $1!`</span> we can quickly change the following input
+By searching for <span class="f60">`^(.*)$`</span> and replacing with <span class="f60">`Hello, $1!`</span> we can quickly change the following input
 
 <pre data-fragment-index="1" class="fragment" style="font-size: 100%;">
 <code class="nohighlight" data-noescape data-trim>
@@ -878,7 +878,7 @@ Searching for <span class="f60">`^(.*)$`</span> and replacing with <span class="
 <p class="fragment" data-fragment-index="3">For example, <span class="f60">`(.)\1`</span> will match <span style="color: green">`aa`</span> and <span style="color: green">`>>`</span>, but not <span style="color: red">`xy`</span></p>
 
 <br>
-<p>In addition to referencing the contents of a group, it is also possible to reference the *regex* for the group. This is called a *subroutine*.</p>
+<p class="fragment" data-fragment-index="9">In addition to referencing the contents of a group, it is also possible to reference the *regex* for the group. <br>This is called a *subroutine*.</p>
 <p class="fragment" data-fragment-index="10">Let's revisit our regex that matches palindromes.</p>
 
 ---
