@@ -29,20 +29,20 @@ Kim Hesselholt Reenberg
   <tr>
     <td class="leftcol">Username</td>
     <td></td>
-    <td class="value">Guest461</td>
+    <td class="value" style="font-style:bold">Guest461</td>
   </tr>
   <tr>
     <td class="leftcol">Password</td>
     <td></td>
-    <td class="value">Easvzgap</td>
+    <td class="value" style="font-style:bold">Easvzgap</td>
   </tr>
 </table>
 
-*Win7/Linux go to <span class="f60">`cp.easv.dk`</span> to login.*
+*Win7/Linux go to <span class="f60">**`cp.easv.dk`**</span> to login.*
 
 <br>
 
-*Full presentation is available at <br><span class="f60">[`http://khreenberg.github.io/goto-regex`](http://khreenberg.github.io/goto-regex)</span>*
+*Full presentation is available online at <br><span class="f60">**[`http://khreenberg.github.io/goto-regex`](http://khreenberg.github.io/goto-regex)**</span>*
 
 ---
 
@@ -53,14 +53,13 @@ Kim Hesselholt Reenberg
 
 ---
 
-## About this talk
+### This talk is split into three main parts:
 
-Q: Why should we even care about formal languages?  
-A: Because they are *sets* of words. This means that we can search for more multiple things in the same search!
-
-***TODO*** <!-- .element: style="color: red" -->
-
-***AGENDA*** <!-- .element: style="color: red" -->
+<ol>
+  <li class="fragment">A brief introduction to formal languages</li>
+  <li class="fragment">Regex features and syntax</li>
+  <li class="fragment">Examples and workshop</li>
+</ol>
 
 
 ===
