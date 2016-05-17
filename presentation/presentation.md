@@ -2,7 +2,7 @@
 
 <!-- .slide: data-background="#000" -->
 ## GOTO Night
-<h1 class="f60">Regular Expressions</h1>
+<h1 class="f60" style="margin-top: -.2em">Regular Expressions</h1>
 
 Kim Hesselholt Reenberg  
 2016-05-17
@@ -39,6 +39,10 @@ Kim Hesselholt Reenberg
 </table>
 
 *Win7/Linux go to <span class="f60">`cp.easv.dk`</span> to login.*
+
+<br>
+
+*Full presentation is available at <br><span class="f60">[`http://khreenberg.github.io/goto-regex`](http://khreenberg.github.io/goto-regex)</span>*
 
 ---
 
@@ -905,7 +909,50 @@ Level | Group 1 | Group 2 | Trying to match | Finds
 
 Heavily simplified for readability; I am ignoring the fact that `.?` is greedy.
 
+---
+
+## Named groups
+
+<p class="fragment">Capture groups and subroutines can be named for easier replacement and backreferencing.</p>
+<p class="fragment">The syntax for named groups is very flavor-dependent, and the examples here might not work with your engine.</p>
+<table class="fragment">
+	<thead>
+		<tr>
+			<th>Syntax</th>
+			<th>Meaning</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>(?&lt;name&gt;…)</code></td>
+			<td>Creates a capture with the given <code class="f60">name</code></td>
+		</tr>
+		<tr>
+			<td><code>\k&lt;name&gt;</code></td>
+			<td>Matches what is currently in the <code class="f60">name</code> group</td>
+		</tr>
+		<tr>
+			<td><code>(?P>name)</code></td>
+			<td>Call the <code class="f60">name</code> subroutine</td>
+		</tr>
+		<tr>
+			<td><code>${name}</code></td>
+			<td>Insert the contents of <code class="f60">name</code> when replacing</td>
+		</tr>
+	</tbody>
+</table>
+
+<br>
+
+<div class="fragment">
+	<p>Here is our palindrome regex with and without named groups:</p>
+	<pre style="font-size: 100%; width: "><code class="nohighlight" data-noescape>^(?&lt;palindrome&gt;(?&lt;first&gt;.)(?P&gt;palindrome)\k&lt;first&gt;|.?)$</code></pre>
+	<pre style="font-size: 100%; width: "><code class="nohighlight" data-noescape>^((.)(?1)\2|.?)$</code></pre>
+</div>
+
 ===
+
+
 
 <!-- ##### EPILOGUE ##### -->
 	
@@ -915,10 +962,9 @@ Heavily simplified for readability; I am ignoring the fact that `.?` is greedy.
 
 ### Libraries & Frameworks
 - https://github.com/hakimel/reveal.js/
-- https://github.com/calevans/external
 
 ### Tools
-- http://www.regexpal.com/ 
+- https://regex101.com/
 - https://www.sublimetext.com/3
 
 
